@@ -5,8 +5,8 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "cheflink"
 version = "0.1.0"
-description = "ChefLink - 主廚社群平台"
-authors = [{name = "Your Name", email = "your.email@example.com"}]
+description = "ChefLink"
+authors = [{name = "Yuhshun Chen", email = "yuhshun@chen.zone"}]
 dependencies = [
     "fastapi",
     "sqlalchemy",
@@ -18,4 +18,4 @@ dependencies = [
 where = ["src"]
 
 [tool.setuptools.package-dir]
-"" = "src" 
+"" = "src"
