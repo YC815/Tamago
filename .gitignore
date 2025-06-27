@@ -5,3 +5,5 @@
 # But do NOT ignore example file(s)
 !.env.example
 !.env.sample
+
+__pycache__/__pycache__/
