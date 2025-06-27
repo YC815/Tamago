@@ -2,27 +2,8 @@
 
 from sqlalchemy import Column, Integer, String, DateTime, Enum, JSON
 from datetime import datetime, timezone, timedelta
-from enum import Enum as PyEnum
 from src.app.core.database import Base
-
-# 通用訂單狀態列舉
-
-
-class OrderStatus(PyEnum):
-    PENDING = "PENDING"         # 待確認／未處理
-    CONFIRMED = "CONFIRMED"     # 已確認／待出貨
-    SHIPPED = "SHIPPED"         # 已出貨
-    DELIVERED = "DELIVERED"     # 已送達
-    CANCELLED = "CANCELLED"     # 已取消
-    RETURNED = "RETURNED"       # 已退貨
-
-# 付款狀態列舉
-
-
-class PaymentStatus(PyEnum):
-    UNPAID = "UNPAID"           # 尚未付款
-    PAID = "PAID"               # 已付款
-    REFUNDED = "REFUNDED"       # 已退款
+from src.app.orders.enums import OrderStatus, PaymentStatus
 
 
 class Order(Base):
