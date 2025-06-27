@@ -6,4 +6,5 @@
 !.env.example
 !.env.sample
 
-__pycache__/__pycache__/
+__pycache__/
+*.py[cod]

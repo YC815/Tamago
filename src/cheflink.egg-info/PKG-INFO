@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: cheflink
+Version: 0.1.0
+Summary: ChefLink - 主廚社群平台
+Author-email: Your Name <your.email@example.com>
+Requires-Dist: fastapi
+Requires-Dist: sqlalchemy
+Requires-Dist: python-dotenv
+Requires-Dist: psycopg2-binary

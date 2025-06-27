@@ -3,7 +3,7 @@ chef_link/
 ├── README.md
 ├── poetry.lock / requirements.txt
 └── src/
-    └── app/
+    └── app/                       # 核心基礎設施
         ├── core/
         │   ├── config.py          # 讀 .env、存全域設定
         │   ├── database.py        # SessionLocal, engine
