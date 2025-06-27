@@ -7,37 +7,27 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-def get_required_env(key: str) -> str:
-    """取得必須的環境變數，如果不存在則拋出明確的錯誤訊息
-
-    Args:
-        key (str): 環境變數的名稱
-
-    Returns:
-        str: 環境變數的值
-
-    Raises:
-        ValueError: 當環境變數不存在時
-    """
-    value = os.environ.get(key)
-    if value is None:
-        raise ValueError(
-            f"必須設定環境變數 {key}！\n"
-            f"請在 .env 檔案中設定 {key}=your_value\n"
-            f"或在系統環境變數中設定此值。"
-        )
-    return value
-
-
 class Settings:
     """應用程式設定類別"""
 
-    # PostgreSQL 設定（必須提供，無預設值）
-    PG_HOST: str = get_required_env("PG_HOST")
-    PG_PORT: str = get_required_env("PG_PORT")
-    PG_USER: str = get_required_env("PG_USER")
-    PG_PASSWORD: str = get_required_env("PG_PASSWORD")
-    PG_DATABASE: str = get_required_env("PG_DATABASE")
+    def __init__(self):
+        """初始化設定，驗證必要的環境變數"""
+        required_vars = ['PG_HOST', 'PG_PORT', 'PG_USER', 'PG_PASSWORD', 'PG_DATABASE']
+        missing_vars = []
+
+        for var in required_vars:
+            if var not in os.environ:
+                missing_vars.append(var)
+
+        if missing_vars:
+            raise ValueError(f"必須設定環境變數: {', '.join(missing_vars)}")
+
+        # 設定屬性
+        self.PG_HOST = os.environ["PG_HOST"]
+        self.PG_PORT = os.environ["PG_PORT"]
+        self.PG_USER = os.environ["PG_USER"]
+        self.PG_PASSWORD = os.environ["PG_PASSWORD"]
+        self.PG_DATABASE = os.environ["PG_DATABASE"]
 
     @property
     def db_uri(self) -> str:
@@ -45,5 +35,8 @@ class Settings:
         return f"postgresql://{self.PG_USER}:{self.PG_PASSWORD}@{self.PG_HOST}:{self.PG_PORT}/{self.PG_DATABASE}"
 
 
-# 建立全域設定實例
-settings = Settings()
+# 移除這行：settings = Settings()
+# 改為在需要時才建立實例
+def get_settings() -> Settings:
+    """取得設定實例"""
+    return Settings()
