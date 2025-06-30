@@ -15,7 +15,7 @@ class Order(Base):
     customer_name = Column(String, nullable=False)      # 姓名
     phone = Column(String, nullable=False)              # 聯絡電話
     email = Column(String, nullable=False)              # 電子郵件
-    item = Column(JSON, nullable=False)               # 品項（目前先用簡單字串表示）
+    item = Column(JSON, nullable=False)               # 品項
 
     # 系統欄位
     created_at = Column(DateTime, default=lambda: datetime.now(timezone(timedelta(hours=8))))   # 建立時間

@@ -1,7 +1,7 @@
 # src/app/orders/schemas.py
 
 from pydantic import BaseModel, EmailStr, Field
-from typing import List, Optional
+from typing import List
 from datetime import datetime
 from src.app.orders.enums import OrderStatus, PaymentStatus
 
