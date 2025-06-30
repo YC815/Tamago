@@ -2,14 +2,14 @@
 
 from sqlalchemy import Column, Integer, String, DateTime, Enum, JSON
 from datetime import datetime, timezone, timedelta
-from src.app.core.database import Base
-from src.app.orders.enums import OrderStatus, PaymentStatus
+from ..core.database import Base
+from .enums import OrderStatus, PaymentStatus
 
 
 class Order(Base):
     __tablename__ = "orders"
 
-    id = Column(Integer, primary_key=True, index=True)  # 訂單 ID（系統自填）
+    id = Column(String, primary_key=True, index=True)  # 訂單 ID（系統自填）
 
     # 使用者輸入
     customer_name = Column(String, nullable=False)      # 姓名
