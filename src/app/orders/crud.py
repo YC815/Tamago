@@ -2,6 +2,7 @@
 
 from typing import List, Optional
 from sqlalchemy.orm import Session
+from datetime import datetime
 from . import models, schemas, enums
 from ..common.exceptions import raise_not_found
 
@@ -27,10 +28,11 @@ def get_all_orders(
     return query.offset(skip).limit(limit).all()
 
 
-def create_order(db: Session, order: schemas.OrderCreate) -> models.Order:
+def create_order(db: Session, order: schemas.OrderCreate, order_id: str) -> models.Order:
     """根據使用者輸入的訂單資料（包含顧客資訊與品項），將其轉換為資料庫格式並插入 Order 資料表中，回傳建立完成的訂單資料。"""
     items_json = [item.model_dump() for item in order.item]
     db_order = models.Order(
+        id=order_id,
         customer_name=order.customer_name,
         phone=order.phone,
         email=order.email,
@@ -85,3 +87,25 @@ def delete_order(db: Session, order_id: int) -> models.Order:
     db.delete(db_order)
     db.commit()
     return db_order
+
+
+def get_latest_order_id_number(db: Session) -> int:
+    """從 Order 資料表中取得最新的訂單編號，並回傳該編號。"""
+    # 獲取今日的訂單 ID 來計算下一個序號
+    today = datetime.now().strftime('%Y%m%d')
+    prefix = f"ORD-{today}-"
+
+    # 查詢今日最新的訂單
+    latest_order = db.query(models.Order).filter(
+        models.Order.id.like(f"{prefix}%")
+    ).order_by(models.Order.id.desc()).first()
+
+    if not latest_order:
+        return 0  # 今日第一筆訂單
+
+    # 從訂單 ID 中提取序號 (例如: "ORD-20231201-0001" -> 1)
+    try:
+        last_number = int(latest_order.id.split('-')[-1])
+        return last_number
+    except (ValueError, IndexError):
+        return 0
