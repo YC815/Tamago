@@ -175,7 +175,7 @@ class TestSettingsIntegration:
             'PG_PORT': '5432',
             'PG_USER': 'app_user',
             'PG_PASSWORD': 'super_secure_password',
-            'PG_DATABASE': 'cheflink_prod'
+            'PG_DATABASE': 'tamago_prod'
         }
 
         with patch.dict(os.environ, env_vars):
@@ -187,8 +187,8 @@ class TestSettingsIntegration:
             assert settings.PG_PORT == '5432'
             assert settings.PG_USER == 'app_user'
             assert settings.PG_PASSWORD == 'super_secure_password'
-            assert settings.PG_DATABASE == 'cheflink_prod'
+            assert settings.PG_DATABASE == 'tamago_prod'
 
             # 驗證資料庫連線字串
-            expected_uri = "postgresql://app_user:super_secure_password@prod-db.company.com:5432/cheflink_prod"
+            expected_uri = "postgresql://app_user:super_secure_password@prod-db.company.com:5432/tamago_prod"
             assert settings.db_uri == expected_uri

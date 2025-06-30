@@ -1,7 +1,8 @@
 annotated-types==0.7.0
 anyio==4.9.0
 certifi==2025.6.15
--e git+https://github.com/YC815/ChefLink.git@145a04d2ce9c422debc883de419e2a3e6ffae313#egg=cheflink
+# Editable install with no version control (tamago==0.1.0)
+-e /Users/yushunchen/.z/pr/Tamago/
 click==8.2.1
 dnspython==2.7.0
 email_validator==2.2.0

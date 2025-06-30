@@ -3,15 +3,16 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "cheflink"
+name = "tamago"
 version = "0.1.0"
-description = "ChefLink"
+description = "Tamago"
 authors = [{name = "Yuhshun Chen", email = "yuhshun@chen.zone"}]
 dependencies = [
     "fastapi",
     "sqlalchemy",
     "python-dotenv",
     "psycopg2-binary",
+    "pytest>=8.4.1",
 ]
 
 [tool.setuptools.packages.find]

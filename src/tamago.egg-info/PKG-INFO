@@ -1,9 +1,12 @@
 Metadata-Version: 2.4
 Name: tamago
 Version: 0.1.0
-Summary: Tamago - 小型食品商店管理系統
+Summary: Tamago
 Author-email: Yuhshun Chen <yuhshun@chen.zone>
+License-File: LICENSE.md
 Requires-Dist: fastapi
 Requires-Dist: sqlalchemy
 Requires-Dist: python-dotenv
 Requires-Dist: psycopg2-binary
+Requires-Dist: pytest>=8.4.1
+Dynamic: license-file

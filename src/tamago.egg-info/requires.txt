@@ -1,0 +1,5 @@
+fastapi
+sqlalchemy
+python-dotenv
+psycopg2-binary
+pytest>=8.4.1
