@@ -2,9 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-# 匯入路由器
-from src.app.orders import router as orders_router
-from src.app.common.exceptions import app_exception_handler, AppException
+# 匯入路由器 - 使用相對導入
+from .orders import router as orders_router
+from .common.exceptions import app_exception_handler, AppException
 
 # 建立 FastAPI 應用程式實例
 app = FastAPI(

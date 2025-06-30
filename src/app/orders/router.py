@@ -5,9 +5,9 @@ from sqlalchemy.orm import Session
 from typing import List, Optional
 from datetime import datetime
 
-# 匯入相關模組
-from src.app.common.deps import get_db
-from src.app.common.exceptions import raise_not_found
+# 匯入相關模組 - 使用相對導入
+from ..common.deps import get_db
+from ..common.exceptions import raise_not_found
 from . import schemas, crud, models
 from .enums import OrderStatus, PaymentStatus
 
