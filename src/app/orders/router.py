@@ -32,3 +32,17 @@ async def get_all_orders(
 ):
     orders = crud.get_all_orders(db, date_start, date_end, skip, limit)
     return orders
+
+
+@router.get("/get_order_by_id/{order_id}", response_model=schemas.OrderOut)
+async def get_order_by_id(order_id: int, db: Session = Depends(get_db)):
+    order = crud.get_order_by_id(db, order_id)
+    if not order:
+        raise_not_found()
+    return order
+
+
+@router.post("/create_order", response_model=schemas.OrderOut)
+async def create_order(order: schemas.OrderCreate, db: Session = Depends(get_db)):
+    order_id = f"ORD-{datetime.now().strftime('%Y%m%d')}-{crud.get_latest_order_id_number(db) + 1:04d}"
+    return crud.create_order(db, order, order_id)
