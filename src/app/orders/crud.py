@@ -13,10 +13,10 @@ def get_order_by_id(db: Session, order_id: int) -> Optional[models.Order]:
 
 def get_all_orders(
     db: Session,
-    skip: int = 0,
-    limit: int = 100,
     date_start: Optional[str] = None,
     date_end: Optional[str] = None,
+    skip: int = 0,
+    limit: int = 100,
 ) -> List[models.Order]:
     """從 Order 資料表中篩選並導出訂單清單，可依照建立時間過濾、並支援分頁查詢。"""
     query = db.query(models.Order)
