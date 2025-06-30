@@ -3,7 +3,7 @@
 from pydantic import BaseModel, EmailStr, Field
 from typing import List
 from datetime import datetime
-from src.app.orders.enums import OrderStatus, PaymentStatus
+from .enums import OrderStatus, PaymentStatus
 
 
 # 品項結構定義
@@ -61,6 +61,10 @@ class OrderOut(OrderCreate):
     created_at: datetime
     status: OrderStatus
     payment_status: PaymentStatus
+    item: List[OrderItem]
+    customer_name: str
+    phone: str
+    email: EmailStr
 
     class Config:
         orm_mode = True  # ⬅️ 這行很重要，讓 SQLAlchemy 資料可以轉成 schema
