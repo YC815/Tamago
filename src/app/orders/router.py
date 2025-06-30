@@ -20,15 +20,3 @@ router = APIRouter(
         400: {"description": "請求資料錯誤"},
     }
 )
-
-
-@router.get("/", response_model=List[schemas.OrderOut])
-async def get_all_orders(
-    db: Session = Depends(get_db),
-    date_start: Optional[str] = None,
-    date_end: Optional[str] = None,
-    skip: int = 0,
-    limit: int = 100,
-):
-    orders = crud.get_all_orders(db, date_start, date_end, skip, limit)
-    return orders
