@@ -30,7 +30,7 @@
 [ ]         │   ├── schemas.py
 [ ]         │   ├── crud.py
 [ ]         │   └── router.py
-[ ]         ├── orders/             # 功能模組 #4
+[ ]         ├── orders/                # 功能模組 #4
 [ ]         │   ├── models.py
 [ ]         │   ├── schemas.py
 [ ]         │   ├── crud.py
