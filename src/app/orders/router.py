@@ -42,7 +42,12 @@ async def get_order_by_id(order_id: int, db: Session = Depends(get_db)):
     return order
 
 
-@router.post("/create_order", response_model=schemas.OrderOut)
+@router.post("/create_order", response_model=schemas.OrderOut, status_code=status.HTTP_201_CREATED)
 async def create_order(order: schemas.OrderCreate, db: Session = Depends(get_db)):
-    order_id = f"ORD-{datetime.now().strftime('%Y%m%d')}-{crud.get_latest_order_id_number(db) + 1:04d}"
-    return crud.create_order(db, order, order_id)
+    """
+    建立一筆新的訂單。
+
+    - **order**: 訂單資料
+    - **db**: 資料庫 session
+    """
+    return crud.create_order(db=db, order=order)

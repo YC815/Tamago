@@ -66,10 +66,10 @@ class TestDatabaseConfiguration:
 
     def test_get_db_function(self):
         """測試 get_db 依賴注入函數"""
-        from src.app.core.database import get_db
+        from src.app.common.deps import get_db
 
         # Mock SessionLocal 以避免真實資料庫連線
-        with patch('src.app.core.database.SessionLocal') as mock_session_local:
+        with patch('src.app.common.deps.SessionLocal') as mock_session_local:
             mock_db = MagicMock()
             mock_session_local.return_value = mock_db
 
