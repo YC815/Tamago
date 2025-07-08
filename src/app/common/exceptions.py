@@ -40,6 +40,14 @@ class UnauthorizedException(AppException):
         super().__init__(self.message)
 
 
+class BadRequestException(AppException):
+    """無效的用戶請求（例如欄位格式錯誤）"""
+
+    def __init__(self, message="請求格式錯誤"):
+        self.message = message
+        super().__init__(self.message)
+
+
 # ==================== 統一錯誤回應格式 ====================
 
 def create_error_response(
@@ -75,6 +83,10 @@ async def app_exception_handler(request: Request, exc: AppException) -> JSONResp
         status_code = status.HTTP_401_UNAUTHORIZED
         error_code = "UNAUTHORIZED"
         logger.warning(f"Unauthorized access: {exc.message}")
+    elif isinstance(exc, BadRequestException):
+        status_code = status.HTTP_400_BAD_REQUEST
+        error_code = "BAD_REQUEST"
+        logger.error(f"Bad request: {exc.message}")
     else:
         status_code = status.HTTP_400_BAD_REQUEST
         error_code = "BAD_REQUEST"
