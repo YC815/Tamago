@@ -43,11 +43,18 @@ async def get_order_by_id(order_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/create_order", response_model=schemas.OrderOut, status_code=status.HTTP_201_CREATED)
-async def create_order(order: schemas.OrderCreate, db: Session = Depends(get_db)):
+def create_order(order: schemas.OrderCreate, db: Session = Depends(get_db)):
     """
-    建立一筆新的訂單。
+    建立一筆新的訂單
 
-    - **order**: 訂單資料
-    - **db**: 資料庫 session
+    - **order**: 訂單資料，包含顧客資訊與購買品項
+    - **db**: 資料庫連線
     """
-    return crud.create_order(db=db, order=order)
+    # 產生訂單編號，格式為 ORD-YYYYMMDD-XXXX (當日流水號)
+    order_id = f"ORD-{datetime.now().strftime('%Y%m%d')}-{crud.get_latest_order_id_number(db) + 1:04d}"
+
+    # 呼叫 CRUD 函式建立訂單並取得回傳的資料庫物件
+    new_order = crud.create_order(db, order, order_id)
+
+    # 回傳建立好的訂單資料，FastAPI 會自動依據 response_model (schemas.OrderOut) 進行轉換
+    return new_order
