@@ -30,12 +30,36 @@ async def get_all_orders(
     skip: int = 0,
     limit: int = 100,
 ):
+    """
+    取得所有訂單
+
+    Args:
+        db (Session, optional): 資料庫連線. Defaults to Depends(get_db).
+        date_start (Optional[str], optional): 起始日期. Defaults to None.
+        date_end (Optional[str], optional): 結束日期. Defaults to None.
+        skip (int, optional): 跳過的筆數. Defaults to 0.
+        limit (int, optional): 限制回傳的筆數. Defaults to 100.
+
+    Returns:
+        List[schemas.OrderOut]: 訂單列表
+    """
     orders = crud.get_all_orders(db, date_start, date_end, skip, limit)
     return orders
 
 
-@router.get("/get_order_by_id/{order_id}", response_model=schemas.OrderOut)
-async def get_order_by_id(order_id: int, db: Session = Depends(get_db)):
+@router.get("/get_order_by_id/{order_id}")
+async def get_order_by_id(order_id: str, db: Session = Depends(get_db)):
+    """
+    根據訂單編號取得訂單
+
+    Args:
+        order_id (str): 訂單編號
+        db (Session, optional): 資料庫連線. Defaults to Depends(get_db).
+
+    Returns:
+        schemas.OrderOut: 訂單資料
+    """
+    # crud 函式會在上游處理好 not found 的情況
     order = crud.get_order_by_id(db, order_id)
     if not order:
         raise_not_found()
