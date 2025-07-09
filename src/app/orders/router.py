@@ -2,12 +2,12 @@
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from datetime import datetime
 
 # 匯入相關模組 - 使用相對導入
 from ..common.deps import get_db
-from ..common.exceptions import raise_not_found
+from ..common.responses import create_success_response
 from . import schemas, crud, models
 from .enums import OrderStatus, PaymentStatus
 
@@ -64,8 +64,8 @@ async def get_order_by_id(order_id: str, db: Session = Depends(get_db)):
     return create_success_response(schemas.OrderOut.model_validate(order).model_dump(), message=f"成功取得訂單 #{order_id}")
 
 
-@router.post("/create_order", response_model=schemas.OrderOut, status_code=status.HTTP_201_CREATED)
-def create_order(order: schemas.OrderCreate, db: Session = Depends(get_db)):
+@router.post("/create_order", status_code=status.HTTP_201_CREATED)
+async def create_order(order: schemas.OrderCreate, db: Session = Depends(get_db)):
     """
     建立一筆新的訂單
 
@@ -78,5 +78,28 @@ def create_order(order: schemas.OrderCreate, db: Session = Depends(get_db)):
     # 呼叫 CRUD 函式建立訂單並取得回傳的資料庫物件
     new_order = crud.create_order(db, order, order_id)
 
-    # 回傳建立好的訂單資料，FastAPI 會自動依據 response_model (schemas.OrderOut) 進行轉換
-    return new_order
+    # 回傳建立好的訂單資料
+    return create_success_response(schemas.OrderOut.model_validate(new_order).model_dump(), message="訂單已成功建立", status_code=201)
+
+
+@router.post("/delete_order_by_id/{order_id}")
+async def delete_order_by_id(order_id: str, db: Session = Depends(get_db)):
+    """
+    刪除訂單
+
+    Args:
+        order_id (str): 訂單編號
+        db (Session, optional): 資料庫連線. Defaults to Depends(get_db).
+    """
+    # crud 函式會處理找不到訂單的例外
+    crud.delete_order_by_id(db, order_id)
+    return create_success_response(None, message=f"訂單 #{order_id} 已成功刪除")
+
+
+@router.post("/update_order_by_id/{order_id}")
+async def update_order_by_id(order_id: str, order: schemas.OrderCreate, db: Session = Depends(get_db)):
+    """
+    更新訂單
+    """
+    updated_order = crud.update_order_by_id(db, order_id, order)
+    return create_success_response(schemas.OrderOut.model_validate(updated_order).model_dump(), message=f"訂單 #{order_id} 已成功更新")
