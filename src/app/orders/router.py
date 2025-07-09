@@ -44,7 +44,7 @@ async def get_all_orders(
         List[schemas.OrderOut]: 訂單列表
     """
     orders = crud.get_all_orders(db, date_start, date_end, skip, limit)
-    return orders
+    return create_success_response(orders, message="成功取得所有訂單")
 
 
 @router.get("/get_order_by_id/{order_id}")
@@ -61,9 +61,7 @@ async def get_order_by_id(order_id: str, db: Session = Depends(get_db)):
     """
     # crud 函式會在上游處理好 not found 的情況
     order = crud.get_order_by_id(db, order_id)
-    if not order:
-        raise_not_found()
-    return order
+    return create_success_response(schemas.OrderOut.model_validate(order).model_dump(), message=f"成功取得訂單 #{order_id}")
 
 
 @router.post("/create_order", response_model=schemas.OrderOut, status_code=status.HTTP_201_CREATED)
