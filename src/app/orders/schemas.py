@@ -1,6 +1,6 @@
 # src/app/orders/schemas.py
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, ConfigDict
 from typing import List
 from datetime import datetime
 from .enums import OrderStatus, PaymentStatus
@@ -13,15 +13,16 @@ class OrderItem(BaseModel):
     quantity: int = Field(..., description="數量")
     price: int = Field(..., description="單價")
 
-    class Config:
-        schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "product_id": "cake001",
                 "name": "草莓蛋糕",
                 "quantity": 2,
-                "price": 150
+                "price": 150,
             }
         }
+    )
 
 
 # 建立訂單時使用
@@ -31,8 +32,8 @@ class OrderCreate(BaseModel):
     email: EmailStr
     item: List[OrderItem]  # 這邊會轉成 JSON 存入資料庫
 
-    class Config:
-        schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "customer_name": "王小明",
                 "phone": "0912345678",
@@ -42,22 +43,23 @@ class OrderCreate(BaseModel):
                         "product_id": "cake001",
                         "name": "草莓蛋糕",
                         "quantity": 2,
-                        "price": 150
+                        "price": 150,
                     },
                     {
                         "product_id": "pudding002",
                         "name": "焦糖布丁",
                         "quantity": 1,
-                        "price": 80
-                    }
-                ]
+                        "price": 80,
+                    },
+                ],
             }
         }
+    )
 
 
 # 查詢或回傳時使用
 class OrderOut(OrderCreate):
-    id: int
+    id: str
     created_at: datetime
     status: OrderStatus
     payment_status: PaymentStatus
@@ -66,5 +68,4 @@ class OrderOut(OrderCreate):
     phone: str
     email: EmailStr
 
-    class Config:
-        orm_mode = True  # ⬅️ 這行很重要，讓 SQLAlchemy 資料可以轉成 schema
+    model_config = ConfigDict(from_attributes=True)
