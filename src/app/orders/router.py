@@ -22,7 +22,7 @@ router = APIRouter(
 )
 
 
-@router.get("/get_all_orders", response_model=List[schemas.OrderOut])
+@router.get("/get_all_orders")
 async def get_all_orders(
     db: Session = Depends(get_db),
     date_start: Optional[str] = None,
