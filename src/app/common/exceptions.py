@@ -21,15 +21,25 @@ logger = logging.getLogger(__name__)
 
 class AppException(Exception):
     """應用程式自訂錯誤的基礎例外類別"""
-    pass
+
+    def __init__(self, message: str = "應用程式發生非預期錯誤"):
+        self.message = message
+        super().__init__(self.message)
 
 
 class NotFoundException(AppException):
     """資源未找到例外"""
 
-    def __init__(self, message="資源未找到"):
-        self.message = message
-        super().__init__(self.message)
+    def __init__(self, resource_name: str, resource_id: any):
+        message = f"找不到資源 {resource_name} (ID: {resource_id})"
+        super().__init__(message)
+
+
+class DatabaseException(AppException):
+    """資料庫操作失敗例外"""
+
+    def __init__(self, message: str = "資料庫操作失敗"):
+        super().__init__(message)
 
 
 class UnauthorizedException(AppException):
@@ -79,6 +89,10 @@ async def app_exception_handler(request: Request, exc: AppException) -> JSONResp
         status_code = status.HTTP_404_NOT_FOUND
         error_code = "NOT_FOUND"
         logger.info(f"Resource not found: {exc.message}")
+    elif isinstance(exc, DatabaseException):
+        status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+        error_code = "DATABASE_ERROR"
+        logger.error(f"Database error: {exc.message}")
     elif isinstance(exc, UnauthorizedException):
         status_code = status.HTTP_401_UNAUTHORIZED
         error_code = "UNAUTHORIZED"
@@ -151,7 +165,7 @@ async def generic_exception_handler(request: Request, exc: Exception) -> JSONRes
 
 def raise_not_found(message: str = "資源未找到") -> None:
     """便利函數：拋出資源未找到例外"""
-    raise NotFoundException(message)
+    raise NotFoundException("resource", message)  # 為了兼容舊的用法，暫時保留
 
 
 def raise_unauthorized(message: str = "未授權存取") -> None:
